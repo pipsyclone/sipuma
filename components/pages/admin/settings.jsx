@@ -23,9 +23,9 @@ export default function Settings() {
 	useEffect(() => {
 		// Update state setiap kali userDetail berubah
 		if (userDetail) {
-			setName(userDetail.name || "");
-			setEmail(userDetail.email || "");
-			setNophone(userDetail.nophone || "");
+			setName(userDetail?.name || "");
+			setEmail(userDetail?.email || "");
+			setNophone(userDetail?.nophone || "");
 		}
 	}, [userDetail]);
 

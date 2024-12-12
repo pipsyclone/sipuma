@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 export async function GET(request) {
 	try {
 		const userid = request.nextUrl.searchParams.get("userid");
-		const data = await prisma.users.findMany({
+		const data = await prisma.users.findFirst({
 			where: { userid },
 		});
 

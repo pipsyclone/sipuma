@@ -19,7 +19,7 @@ export function getUserDetail(userid) {
 	const isLoading = !data && isValidating;
 
 	return {
-		userDetail: data?.data[0] || null,
+		userDetail: data?.data,
 		getuserDetailLoading: isLoading,
 		error,
 	};

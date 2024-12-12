@@ -1,6 +1,6 @@
 "use client";
 import Card from "@/components/ui/card";
-import { getBusinessByUser } from "@/utils/custom-swr";
+import { getBusinessByUser, getCategorys } from "@/utils/custom-swr";
 import Scripts from "@/utils/scripts";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
@@ -9,9 +9,11 @@ import axios from "axios";
 export default function BussinesSubmission() {
 	const { data: session } = useSession();
 	const { businessByUser } = getBusinessByUser(session?.user?.userid);
+	const { categorys } = getCategorys();
 	const { toastAlert } = Scripts();
 
 	const [userid] = useState(session?.user?.userid);
+	const [categoryid, setCategoryid] = useState("");
 	const [owner_name, setOwnerName] = useState("");
 	const [bussines_name, setBussinesName] = useState("");
 	const [bussines_foto, setBussinesFoto] = useState(null);
@@ -20,6 +22,7 @@ export default function BussinesSubmission() {
 
 	useEffect(() => {
 		if (businessByUser) {
+			setCategoryid(businessByUser.categoryid);
 			setOwnerName(businessByUser.owner_name);
 			setBussinesName(businessByUser.bussines_name);
 			setBussinesFoto(businessByUser.bussines_foto);
@@ -55,6 +58,7 @@ export default function BussinesSubmission() {
 		} else {
 			const formData = new FormData();
 			formData.append("userid", userid);
+			formData.append("categoryid", categoryid);
 			formData.append("owner_name", owner_name);
 			formData.append("bussines_name", bussines_name);
 			formData.append("bussines_foto", bussines_foto);
@@ -85,9 +89,14 @@ export default function BussinesSubmission() {
 				<div className="bg-red-200 border border-red-500 p-3 rounded-lg text-red-900">
 					<strong>STATUS!</strong> Usaha anda tidak disetujui!
 				</div>
-			) : (
+			) : businessByUser?.bussines_status === "WAIT_VERIFIED" ? (
 				<div className="bg-orange-200 border border-orange-500 p-3 rounded-lg text-orange-900">
 					<strong>STATUS!</strong> Pengajuan anda masih menunggu dikonfirmasi!
+				</div>
+			) : (
+				<div className="bg-orange-200 border border-orange-500 p-3 rounded-lg text-orange-900">
+					<strong>PERHATIAN!</strong> Silahkan lakukan pengajuan pada usaha
+					anda, untuk dilakukan pendataan!
 				</div>
 			)}
 
@@ -123,20 +132,47 @@ export default function BussinesSubmission() {
 							/>
 						</div>
 					</div>
-					<div className="flex flex-col gap-2 basis-1/2">
-						<label className="text-sm">Foto / Usaha Anda</label>
-						<input
-							type="file"
-							accept="image/*"
-							className="bg-slate-200 focus:bg-white p-3 text-sm border outline-0 focus:ring-2 focus:ring-blue-300 focus:ring-inset rounded-lg duration-500 ease-in-out"
-							placeholder="Masukkan Foto Toko / Usaha Anda"
-							onChange={handleFileChange}
-							readOnly={
-								businessByUser?.bussines_status === "VERIFIED" ? true : false
-							}
-						/>
+					<div className="flex flex-col md:flex-row gap-3">
+						<div className="flex flex-col gap-2 basis-1/2">
+							<label className="text-sm">Foto / Usaha Anda</label>
+							<input
+								type="file"
+								accept="image/*"
+								className="bg-slate-200 focus:bg-white p-3 text-sm border outline-0 focus:ring-2 focus:ring-blue-300 focus:ring-inset rounded-lg duration-500 ease-in-out"
+								placeholder="Masukkan Foto Toko / Usaha Anda"
+								onChange={handleFileChange}
+								readOnly={
+									businessByUser?.bussines_status === "VERIFIED" ? true : false
+								}
+							/>
+						</div>
+						<div
+							className="flex flex-col gap-2 basis-1/2"
+							value={categoryid}
+							onChange={(e) => setCategoryid(e.target.value)}
+						>
+							<label className="text-sm">Pilih Kategori Usaha : </label>
+							<select className="bg-slate-200 focus:bg-white p-3 text-sm border outline-0 focus:ring-2 focus:ring-blue-300 focus:ring-inset rounded-lg duration-500 ease-in-out">
+								<option value={""}>- Pilih Kategori -</option>
+								{categorys.map((data, key) => {
+									if (DataTransferItemList.categoryid === categoryid) {
+										return (
+											<option value={data.categoryid} key={key}>
+												{data.category_name}
+											</option>
+										);
+									} else {
+										return (
+											<option value={data.categoryid} key={key}>
+												{data.category_name}
+											</option>
+										);
+									}
+								})}
+							</select>
+						</div>
 					</div>
-					<div className="flex flex-col gap-2 basis-1/2">
+					<div className="flex flex-col gap-2">
 						<label className="text-sm">Deskripsi Usaha</label>
 						<textarea
 							rows={7}
@@ -149,7 +185,7 @@ export default function BussinesSubmission() {
 							}
 						></textarea>
 					</div>
-					<div className="flex flex-col gap-2 basis-1/2">
+					<div className="flex flex-col gap-2">
 						<label className="text-sm">Alamat Usaha</label>
 						<textarea
 							rows={7}

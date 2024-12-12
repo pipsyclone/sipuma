@@ -70,6 +70,24 @@ export default function Dashboard(props) {
 								Pengguna
 							</a>
 							<a
+								href="/dashboard/management-bussines"
+								className="flex text-white border-0  hover:bg-zinc-300 hover:text-zinc-900 rounded-lg p-2 duration-500 ease-in-out"
+							>
+								<div className="w-12 text-center">
+									<i className="fa-solid fa-store"></i>
+								</div>
+								Manajemen Pelaku Usaha
+							</a>
+							<a
+								href="/dashboard/category"
+								className="flex text-white border-0  hover:bg-zinc-300 hover:text-zinc-900 rounded-lg p-2 duration-500 ease-in-out"
+							>
+								<div className="w-12 text-center">
+									<i className="fa-solid fa-box"></i>
+								</div>
+								Manajemen Kategori Usaha
+							</a>
+							<a
 								href="/dashboard/event"
 								className="flex text-white border-0  hover:bg-zinc-300 hover:text-zinc-900 rounded-lg p-2 duration-500 ease-in-out"
 							>

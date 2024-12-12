@@ -8,6 +8,9 @@ import Scripts from "@/utils/scripts";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 import { mutate } from "swr";
+import Modal from "@/components/ui/modal";
+import { useState } from "react";
+import Image from "next/image";
 
 export default function IndexDashboard() {
 	const { data: session } = useSession();
@@ -15,6 +18,15 @@ export default function IndexDashboard() {
 	const { users } = getUsers();
 	const { business, verified, notVerified, waitVerified } = getBusiness();
 	const { businessByUser } = getBusinessByUser(session?.user?.userid);
+	const [modal, setModal] = useState(false);
+	const [selectedData, setSelectedData] = useState(false);
+
+	console.log(business);
+
+	const handleDetail = (data) => {
+		setSelectedData(data);
+		setModal(true);
+	};
 
 	const handleUpdateStatus = async (umkmid, status) => {
 		await axios
@@ -79,14 +91,13 @@ export default function IndexDashboard() {
 							subHeaderMemo={true}
 							tableName="Data UMKM Belum Diverifikasi"
 							tableOptions={{
-								paginator: true,
 								rows: 5,
-								rowsPerPageOptions: [5, 10, 20],
 							}}
 							filterFields={["bussines_name"]}
 							columns={[
 								{ field: "bussines_name", header: "Nama Usaha" },
 								{ field: "bussines_desc", header: "Deskripsi" },
+								{ field: "category.category_name", header: "Kategori" },
 								{ field: "bussines_status", header: "Status" },
 								{
 									field: "actions",
@@ -95,22 +106,74 @@ export default function IndexDashboard() {
 										<div className="flex gap-3">
 											<button
 												type="button"
-												onClick={() =>
-													handleUpdateStatus(rowData.umkmid, "VERIFIED")
-												}
-												className={`bg-green-500 p-2 text-white rounded-lg hover:bg-green-400`}
+												onClick={() => handleDetail(rowData)}
+												className={`bg-blue-500 p-2 text-white rounded-lg hover:bg-blue-400`}
 											>
-												VERIFIKASI
+												LIHAT
 											</button>
-											<button
-												type="button"
-												onClick={() =>
-													handleUpdateStatus(rowData.umkmid, "NOT_VERIFIED")
-												}
-												className={`bg-red-500 p-2 text-white rounded-lg hover:bg-green-400`}
-											>
-												TOLAK
-											</button>
+											{rowData.userid ? (
+												rowData.bussines_status === "VERIFIED" ||
+												rowData.bussines_status === "NOT_VERIFIED" ? (
+													""
+												) : (
+													<div className="flex gap-3">
+														<button
+															type="button"
+															onClick={() =>
+																handleUpdateStatus(rowData.umkmid, "VERIFIED")
+															}
+															className={`bg-green-500 p-2 text-white rounded-lg hover:bg-green-400`}
+														>
+															SETUJUI
+														</button>
+														<button
+															type="button"
+															onClick={() =>
+																handleUpdateStatus(
+																	rowData.umkmid,
+																	"NOT_VERIFIED"
+																)
+															}
+															className={`bg-red-500 p-2 text-white rounded-lg hover:bg-red-400`}
+														>
+															TOLAK
+														</button>
+													</div>
+												)
+											) : (
+												""
+											)}
+
+											{modal && selectedData && (
+												<Modal
+													modal={modal}
+													onClose={() => setModal(false)}
+													title={"Detail Usaha Yang Diajukan"}
+												>
+													<Image
+														src={"/foto-umkm/" + selectedData.bussines_foto}
+														alt={selectedData.owner_name}
+														width={1000}
+														height={1000}
+														className="w-auto h-[200px] mb-5 mx-auto"
+													/>
+													<pre>
+														Nama Pemilik Usaha : {selectedData.owner_name}
+														<br />
+														Nama Usaha : {selectedData.bussines_name}
+														<br />
+														Kategori Usaha :{" "}
+														{selectedData.category.category_name}
+														<br />
+														<br />
+														Deskripsi :
+														<br />
+														{selectedData?.bussines_desc}
+														<br />
+														Alamat : {selectedData?.bussines_address}
+													</pre>
+												</Modal>
+											)}
 										</div>
 									),
 								},
@@ -130,10 +193,15 @@ export default function IndexDashboard() {
 						<div className="bg-red-200 border border-red-500 p-3 rounded-lg text-red-900">
 							<strong>STATUS!</strong> Usaha anda tidak disetujui!
 						</div>
-					) : (
+					) : businessByUser?.bussines_status === "WAIT_VERIFIED" ? (
 						<div className="bg-orange-200 border border-orange-500 p-3 rounded-lg text-orange-900">
 							<strong>STATUS!</strong> Pengajuan anda masih menunggu
 							dikonfirmasi!
+						</div>
+					) : (
+						<div className="bg-orange-200 border border-orange-500 p-3 rounded-lg text-orange-900">
+							<strong>PERHATIAN!</strong> Silahkan lakukan pengajuan pada usaha
+							anda, untuk dilakukan pendataan!
 						</div>
 					)}
 

@@ -8,6 +8,7 @@ import { CONFIG } from "@/global/config";
 export async function POST(request) {
 	const formData = await request.formData();
 	const userid = formData.get("userid");
+	const categoryid = formData.get("categoryid");
 	const owner_name = formData.get("owner_name");
 	const bussines_name = formData.get("bussines_name");
 	const bussines_foto = formData.get("bussines_foto");
@@ -46,7 +47,7 @@ export async function POST(request) {
 		await prisma.UMKM.upsert({
 			where: { userid },
 			update: {
-				userid,
+				categoryid,
 				owner_name,
 				bussines_name,
 				bussines_foto: filename,
@@ -55,6 +56,7 @@ export async function POST(request) {
 			},
 			create: {
 				userid,
+				categoryid,
 				owner_name,
 				bussines_name,
 				bussines_foto: filename,

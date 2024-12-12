@@ -54,3 +54,26 @@ export function getBusinessByUser(userid) {
 		errorBussinesByUser: error,
 	};
 }
+
+export function getCategorys() {
+	const { data, isLoading, error } = useSWR(
+		"/api/categorys/get-categorys",
+		fetcher
+	);
+
+	return {
+		categorys: data?.data,
+		getCategorysLoading: isLoading,
+		errorCategorys: error,
+	};
+}
+
+export function getEvents(userid) {
+	const { data, isLoading, error } = useSWR("/api/events/get-events", fetcher);
+
+	return {
+		events: data?.data,
+		getEventsLoading: isLoading,
+		errorEvents: error,
+	};
+}

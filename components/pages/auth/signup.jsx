@@ -95,11 +95,11 @@ export default function SignUp() {
 			<hr />
 			<form onSubmit={handleRegister} className="flex flex-col gap-5">
 				<div className="flex flex-col gap-3 basis-1/2">
-					<label>Masukkan Nama Pemilik Usaha : </label>
+					<label>Masukkan Nama Lengkap : </label>
 					<input
 						type="text"
 						className="bg-slate-200 focus:bg-white p-3 text-sm border outline-0 focus:ring-1 focus:ring-zinc-900 focus:ring-inset rounded-lg duration-500 ease-in-out"
-						placeholder="Nama Pemilik Usaha"
+						placeholder="Nama Lengkap"
 						value={name}
 						onChange={(e) => setName(e.target.value)}
 					/>

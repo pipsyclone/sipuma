@@ -1,4 +1,4 @@
-import BussinesSubmission from "@/components/pages/admin/bussines-submission";
+import BussinesSubmission from "@/components/pages/owner/bussines-submission";
 
 export const metadata = {
 	icons: "./logo.png",

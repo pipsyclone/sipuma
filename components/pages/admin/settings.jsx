@@ -13,7 +13,7 @@ export default function Settings() {
 	const [showPassword, setShowPassword] = useState(false);
 
 	// const [userDetail, setUserDetail] = useState(null);
-	const [userid] = useState(session.user.userid);
+	const [userid] = useState(session?.user?.userid);
 	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
 	const [nophone, setNophone] = useState("");

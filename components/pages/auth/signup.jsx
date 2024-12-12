@@ -88,8 +88,10 @@ export default function SignUp() {
 		}
 	};
 	return (
-		<div className="mx-auto flex flex-col gap-5 w-[500px]">
-			<div className="text-center font-medium text-4xl">Daftar Akun SIPUMA</div>
+		<div className="mx-auto flex flex-col gap-5 w-full md:w-[500px]">
+			<div className="text-center font-medium text-2xl md:text-4xl">
+				Daftar Akun SIPUMA
+			</div>
 			<hr />
 			<form onSubmit={handleRegister} className="flex flex-col gap-5">
 				<div className="flex flex-col gap-3 basis-1/2">

@@ -23,18 +23,25 @@ export default function AuthLayout({ children }) {
 					{isLoading ? (
 						<Loading />
 					) : (
-						<div className="relative w-full h-screen">
-							<div className="flex justify-center items-center">
-								<Middle className="basis-1/2 border">
+						<div className="block md:relative w-full h-screen">
+							<div className="flex flex-col md:flex-row justify-normal md:justify-center items-stretch md:items-center">
+								<Middle className="hidden md:block basis-1/2">
 									<Image
 										src={IllustrationsLogin}
 										alt="Ilustrations Login"
 										width={1000}
 										height={1000}
-										className="w-[500px] h-auto"
+										className="w-[500px]"
 									/>
 								</Middle>
-								<div className="basis-1/2 p-5">{children}</div>
+								<Image
+									src={IllustrationsLogin}
+									alt="Ilustrations Login"
+									width={1000}
+									height={1000}
+									className="w-[100px] mx-auto m-5 block md:hidden"
+								/>
+								<div className="p-5 basis-1/2">{children}</div>
 							</div>
 						</div>
 					)}

@@ -34,8 +34,10 @@ export default function SignIn() {
 	if (isLoading) return <Loading />;
 
 	return (
-		<div className="mx-auto flex flex-col gap-5 w-[500px]">
-			<div className="text-center font-medium text-4xl">Masuk ke SIPUMA</div>
+		<div className="mx-auto flex flex-col gap-5 w-full md:w-[500px]">
+			<div className="text-center font-medium text-2xl md:text-4xl">
+				Masuk ke SIPUMA
+			</div>
 			<hr />
 			<form onSubmit={handleLogin} className="flex flex-col gap-5">
 				<div className="flex flex-col gap-3">

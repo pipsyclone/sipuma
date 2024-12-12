@@ -14,7 +14,7 @@ export default function IndexDashboard() {
 	const { toastAlert } = Scripts();
 	const { users } = getUsers();
 	const { business, verified, notVerified, waitVerified } = getBusiness();
-	const { businessByUser } = getBusinessByUser(session.user.userid);
+	const { businessByUser } = getBusinessByUser(session?.user?.userid);
 
 	const handleUpdateStatus = async (umkmid, status) => {
 		await axios
@@ -48,16 +48,16 @@ export default function IndexDashboard() {
 							footer={"Jumlah UMKM Terajukan : " + waitVerified.length}
 						/>
 						<CardMonitoring
-							className="border-green-500 basis-1/2"
-							title={"UMKM Terverifikasi"}
-							content={verified.length}
-							footer={"Jumlah UMKM yang terverifikasi : " + verified.length}
-						/>
-						<CardMonitoring
 							className="border-red-500 basis-1/2"
 							title={"UMKM Tidak Terverifikasi"}
 							content={notVerified.length}
 							footer={"Jumlah UMKM tidak terverifikasi : " + notVerified.length}
+						/>
+						<CardMonitoring
+							className="border-green-500 basis-1/2"
+							title={"UMKM Terverifikasi"}
+							content={verified.length}
+							footer={"Jumlah UMKM yang terverifikasi : " + verified.length}
 						/>
 					</div>
 

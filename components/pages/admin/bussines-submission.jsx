@@ -8,10 +8,10 @@ import axios from "axios";
 
 export default function BussinesSubmission() {
 	const { data: session } = useSession();
-	const { businessByUser } = getBusinessByUser(session.user.userid);
+	const { businessByUser } = getBusinessByUser(session?.user?.userid);
 	const { toastAlert } = Scripts();
 
-	const [userid] = useState(session.user.userid);
+	const [userid] = useState(session?.user?.userid);
 	const [owner_name, setOwnerName] = useState("");
 	const [bussines_name, setBussinesName] = useState("");
 	const [bussines_foto, setBussinesFoto] = useState(null);

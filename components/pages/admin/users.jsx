@@ -5,7 +5,7 @@ import { getUsers } from "@/utils/custom-swr";
 import axios from "axios";
 
 export default function Users() {
-	const { users, usersLoading, usersError } = getUsers();
+	const { users } = getUsers();
 	console.log(users);
 	const handleDelete = async (userid) => {
 		await axios

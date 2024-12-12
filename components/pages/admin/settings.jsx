@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 
 export default function Settings() {
 	const { data: session, status } = useSession();
-	const { userDetail } = getUserDetail(session.user.userid);
+	const { userDetail } = getUserDetail(session?.user?.userid);
 	const { toastAlert } = Scripts();
 	const [showPassword, setShowPassword] = useState(false);
 

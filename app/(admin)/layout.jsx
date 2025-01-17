@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import AuthProvider from "@/context/AuthProvider";
 import Dashboard from "@/components/pages/admin/template";
 import Loading from "@/components/ui/loading";
+import { ThemeProvider } from "@/context/ThemeProvider";
 
 export default function DashboardLayout({ children }) {
 	const [isLoading, setIsLoading] = useState(true);
@@ -17,11 +18,13 @@ export default function DashboardLayout({ children }) {
 
 	return (
 		<AuthProvider>
-			<html lang="en">
-				<body>
-					{isLoading ? <Loading /> : <Dashboard content={children} />}
-				</body>
-			</html>
+			<ThemeProvider>
+				<html lang="en">
+					<body>
+						{isLoading ? <Loading /> : <Dashboard content={children} />}
+					</body>
+				</html>
+			</ThemeProvider>
 		</AuthProvider>
 	);
 }

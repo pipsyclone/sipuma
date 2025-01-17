@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import prisma from "@/libs/prisma";
 
-export async function GET() {
+export async function GET(request) {
 	try {
-		const data = await prisma.events.findMany({
-			orderBy: {
-				event_date: "desc",
-			},
+		const umkmid = request.nextUrl.searchParams.get("umkmid");
+
+		const data = await prisma.products.findMany({
+			where: { umkmid },
 		});
 
 		return NextResponse.json({

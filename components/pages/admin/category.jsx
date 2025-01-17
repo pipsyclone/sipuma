@@ -117,7 +117,6 @@ export default function Category() {
 					<label className="mt-3">Masukkan Nama Kategori : </label>
 					<input
 						type="text"
-						className="bg-slate-200 focus:bg-white p-3 text-sm border outline-0 focus:ring-2 focus:ring-blue-300 focus:ring-inset rounded-lg duration-500 ease-in-out"
 						placeholder="Nama Kategori"
 						value={category_name}
 						onChange={(e) => setCategoryName(e.target.value)}

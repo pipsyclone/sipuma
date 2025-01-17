@@ -105,7 +105,6 @@ export default function Settings() {
 						<label className="text-sm">Nama Lengkap</label>
 						<input
 							type="text"
-							className="bg-slate-200 focus:bg-white p-3 text-sm border outline-0 focus:ring-2 focus:ring-blue-300 focus:ring-inset rounded-lg duration-500 ease-in-out"
 							placeholder="Nama Lengkap"
 							value={name}
 							onChange={(e) => setName(e.target.value)}
@@ -116,7 +115,6 @@ export default function Settings() {
 							<label className="text-sm">Email</label>
 							<input
 								type="email"
-								className="bg-slate-200 focus:bg-white p-3 text-sm border outline-0 focus:ring-2 focus:ring-blue-300 focus:ring-inset rounded-lg duration-500 ease-in-out"
 								placeholder="Email Aktif"
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
@@ -126,7 +124,6 @@ export default function Settings() {
 							<label className="text-sm">Nomor Telepon</label>
 							<input
 								type="text"
-								className="bg-slate-200 focus:bg-white p-3 text-sm border outline-0 focus:ring-2 focus:ring-blue-300 focus:ring-inset rounded-lg duration-500 ease-in-out"
 								placeholder="Nomor Telepon"
 								value={nophone}
 								onChange={(e) => setNophone(e.target.value)}
@@ -150,7 +147,6 @@ export default function Settings() {
 							<label className="text-sm">Kata Sandi Baru</label>
 							<input
 								type={showPassword ? "text" : "password"}
-								className="bg-slate-200 focus:bg-white p-3 text-sm border outline-0 focus:ring-2 focus:ring-blue-300 focus:ring-inset rounded-lg duration-500 ease-in-out"
 								placeholder="Kata Sandi Baru"
 								value={password}
 								onChange={(e) => setPassword(e.target.value)}
@@ -160,7 +156,6 @@ export default function Settings() {
 							<label className="text-sm">Konfirmasi Kata Sandi</label>
 							<input
 								type={showPassword ? "text" : "password"}
-								className="bg-slate-200 focus:bg-white p-3 text-sm border outline-0 focus:ring-2 focus:ring-blue-300 focus:ring-inset rounded-lg duration-500 ease-in-out"
 								placeholder="Konfirmasi Kata Sandi Baru"
 								value={confirmPassword}
 								onChange={(e) => setConfirmPassword(e.target.value)}

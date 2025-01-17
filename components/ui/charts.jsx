@@ -3,7 +3,6 @@ import { Chart } from "primereact/chart";
 
 export default function Charts({
 	chartTitle,
-	chartType,
 	records,
 	className = "",
 }) {
@@ -11,61 +10,51 @@ export default function Charts({
 	const [chartOptions, setChartOptions] = useState({});
 
 	useEffect(() => {
-		// Inisialisasi array 12 bulan untuk menampung data
 		const processedData = Array(12)
 			.fill(0)
 			.map((_, index) => ({
 				month: new Date(0, index).toLocaleString("default", { month: "long" }),
 				verified: 0,
 				notVerified: 0,
-				waitToVerified: 0, // Tambahkan status waitToVerified
+				waitToVerified: 0,
 			}));
 
-		// Proses data dari records
 		records.forEach((record) => {
-			const date = new Date(record.createdAt); // Parse DateTime
-			const monthIndex = date.getMonth(); // 0 = Januari, 1 = Februari, dst.
+			const date = new Date(record.createdAt);
+			const monthIndex = date.getMonth();
 
-			// Hitung jumlah untuk setiap status
 			if (record.bussines_status === "VERIFIED") {
 				processedData[monthIndex].verified += 1;
 			} else if (record.bussines_status === "NOT_VERIFIED") {
 				processedData[monthIndex].notVerified += 1;
 			} else if (record.bussines_status === "WAIT_VERIFIED") {
-				processedData[monthIndex].waitToVerified += 1; // Tambahkan kondisi ini
+				processedData[monthIndex].waitToVerified += 1;
 			}
 		});
 
-		// Siapkan data untuk chart
 		setChartData({
 			labels: processedData.map((d) => d.month),
 			datasets: [
 				{
-					label: "Verified",
+					label: "Di Verifikasi",
 					data: processedData.map((d) => d.verified),
-					fill: false,
-					borderColor: getComputedStyle(
+					backgroundColor: getComputedStyle(
 						document.documentElement
-					).getPropertyValue("--blue-500"),
-					tension: 0.4,
+					).getPropertyValue("--green-500"),
 				},
 				{
-					label: "Not Verified",
+					label: "Tidak Di Verifikasi",
 					data: processedData.map((d) => d.notVerified),
-					fill: false,
-					borderColor: getComputedStyle(
+					backgroundColor: getComputedStyle(
 						document.documentElement
 					).getPropertyValue("--red-500"),
-					tension: 0.4,
 				},
 				{
-					label: "Wait for Verified", // Dataset baru
+					label: "Menunggu Di Verifikasi",
 					data: processedData.map((d) => d.waitToVerified),
-					fill: false,
-					borderColor: getComputedStyle(
+					backgroundColor: getComputedStyle(
 						document.documentElement
 					).getPropertyValue("--orange-500"),
-					tension: 0.4,
 				},
 			],
 		});
@@ -80,8 +69,13 @@ export default function Charts({
 					display: true,
 					text: chartTitle,
 				},
-				customCanvasBackgroundColor: {
-					color: "lightGreen",
+			},
+			scales: {
+				x: {
+					stacked: false,
+				},
+				y: {
+					beginAtZero: true,
 				},
 			},
 		});
@@ -89,7 +83,7 @@ export default function Charts({
 
 	return (
 		<Chart
-			type={chartType}
+			type="bar"
 			data={chartData}
 			options={chartOptions}
 			className={className}

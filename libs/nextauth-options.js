@@ -20,7 +20,7 @@ export const options = {
 					placeholder: "Masukkan Password",
 				},
 			},
-			async authorize(credentials, req, res) {
+			async authorize(credentials) {
 				const { identifier, password } = credentials;
 				const user = await prisma.users.findFirst({
 					where: {

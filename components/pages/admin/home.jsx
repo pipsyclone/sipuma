@@ -3,7 +3,12 @@ import Card from "@/components/ui/card";
 import CardMonitoring from "@/components/ui/card-monitoring";
 import Charts from "@/components/ui/charts";
 import DataLists from "@/components/ui/datatable";
-import { getBusiness, getBusinessByUser, getUsers } from "@/utils/custom-swr";
+import {
+	getBusiness,
+	getBusinessByUser,
+	getEvents,
+	getUsers,
+} from "@/utils/custom-swr";
 import Scripts from "@/utils/scripts";
 import { useSession } from "next-auth/react";
 import axios from "axios";
@@ -18,10 +23,9 @@ export default function IndexDashboard() {
 	const { users } = getUsers();
 	const { business, verified, notVerified, waitVerified } = getBusiness();
 	const { businessByUser } = getBusinessByUser(session?.user?.userid);
+	const { events } = getEvents();
 	const [modal, setModal] = useState(false);
 	const [selectedData, setSelectedData] = useState(false);
-
-	console.log(business);
 
 	const handleDetail = (data) => {
 		setSelectedData(data);
@@ -50,25 +54,25 @@ export default function IndexDashboard() {
 						<CardMonitoring
 							className="border-blue-500 basis-1/2"
 							title={"Jumlah Pengguna"}
-							content={users.length}
+							content={users?.length}
 							footer={"Jumlah pengguna yang terdaftar : " + users.length}
 						/>
 						<CardMonitoring
 							className="border-orange-500 basis-1/2"
 							title={"UMKM Terajukkan"}
-							content={waitVerified.length}
+							content={waitVerified?.length}
 							footer={"Jumlah UMKM Terajukan : " + waitVerified.length}
 						/>
 						<CardMonitoring
 							className="border-red-500 basis-1/2"
 							title={"UMKM Tidak Terverifikasi"}
-							content={notVerified.length}
+							content={notVerified?.length}
 							footer={"Jumlah UMKM tidak terverifikasi : " + notVerified.length}
 						/>
 						<CardMonitoring
 							className="border-green-500 basis-1/2"
 							title={"UMKM Terverifikasi"}
-							content={verified.length}
+							content={verified?.length}
 							footer={"Jumlah UMKM yang terverifikasi : " + verified.length}
 						/>
 					</div>
@@ -78,10 +82,9 @@ export default function IndexDashboard() {
 							chartTitle={
 								"Data Pengajuan Per Tahun " + new Date().getFullYear()
 							}
-							chartType={"line"}
 							records={business}
 							className="w-[95%] mx-auto"
-							// chartTitle={"Data Statistik UMKM"}
+						// chartTitle={"Data Statistik UMKM"}
 						/>
 					</Card>
 
@@ -113,7 +116,7 @@ export default function IndexDashboard() {
 											</button>
 											{rowData.userid ? (
 												rowData.bussines_status === "VERIFIED" ||
-												rowData.bussines_status === "NOT_VERIFIED" ? (
+													rowData.bussines_status === "NOT_VERIFIED" ? (
 													""
 												) : (
 													<div className="flex gap-3">
@@ -184,12 +187,12 @@ export default function IndexDashboard() {
 			) : (
 				<>
 					{businessByUser !== null &&
-					businessByUser?.bussines_status === "VERIFIED" ? (
+						businessByUser?.bussines_status === "VERIFIED" ? (
 						<div className="bg-green-200 border border-green-500 p-3 rounded-lg text-green-900">
 							<strong>STATUS!</strong> Usaha anda telah disetujui!
 						</div>
 					) : businessByUser !== null &&
-					  businessByUser?.bussines_status === "NOT_VERIFIED" ? (
+						businessByUser?.bussines_status === "NOT_VERIFIED" ? (
 						<div className="bg-red-200 border border-red-500 p-3 rounded-lg text-red-900">
 							<strong>STATUS!</strong> Usaha anda tidak disetujui!
 						</div>
@@ -214,6 +217,46 @@ export default function IndexDashboard() {
 							pendataan usaha anda!
 						</p>
 					</Card>
+
+					<div className="grid grid-cols-4 gap-3 mt-3">
+						{events?.length > 0 ? (
+							events?.map((data, key) => {
+								return (
+									<Card className="w-full" key={key}>
+										<Image
+											src={"/foto-events/" + data.event_foto}
+											alt={data.event_name}
+											width={1000}
+											height={1000}
+											className="w-full h-[200px] mb-3"
+										/>
+										<hr />
+										<div className="mt-3">
+											<div className="flex justify-between items-center">
+												<span className="text-xl font-medium">
+													{data.event_name}
+												</span>
+												<span
+													className={
+														new Date(data.event_date).toDateString() <
+															new Date().toDateString()
+															? "text-sm text-red-500 italic"
+															: "text-sm text-green-500 italic"
+													}
+												>
+													{new Date(data.event_date).toDateString()}
+												</span>
+											</div>
+											<br />
+											<p>{data.event_desc}</p>
+										</div>
+									</Card>
+								);
+							})
+						) : (
+							<div className="text-center">Tidak ada event tersedia!</div>
+						)}
+					</div>
 				</>
 			)}
 		</>

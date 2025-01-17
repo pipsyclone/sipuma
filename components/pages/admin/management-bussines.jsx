@@ -65,14 +65,14 @@ export default function ManagementBussines() {
 							<div className="flex gap-3">
 								<button
 									type="button"
+									className={`bg-sky-500 p-2 text-white rounded-lg hover:bg-sky-400`}
 									onClick={() => handleDetail(rowData)}
-									className={`bg-blue-500 p-2 text-white rounded-lg hover:bg-blue-400`}
 								>
 									LIHAT
 								</button>
 								{rowData.userid ? (
 									rowData.bussines_status === "VERIFIED" ||
-									rowData.bussines_status === "NOT_VERIFIED" ? (
+										rowData.bussines_status === "NOT_VERIFIED" ? (
 										""
 									) : (
 										<div className="flex gap-3">
@@ -126,6 +126,21 @@ export default function ManagementBussines() {
 											{selectedData?.bussines_desc}
 											<br />
 											Alamat : {selectedData?.bussines_address}
+											<br />
+											<br />
+											Bukti Pendirian Usaha :
+											<br />
+											{
+												selectedData.bussines_proof_foto !== "-" ?
+													<Image
+														src={"/foto-bukti-pendirian-usaha/" + selectedData.bussines_proof_foto}
+														alt={selectedData.owner_name}
+														width={1000}
+														height={1000}
+														className="w-auto h-[200px] mb-5 mx-auto"
+													/>
+													: "-"
+											}
 										</pre>
 									</Modal>
 								)}

@@ -7,7 +7,14 @@ export async function GET(request) {
 			where: { userid },
 		});
 
-		return NextResponse.json({ status: 200, message: "OK", data });
+		const dataUMKM = await prisma.UMKM.findFirst({
+			where: { userid },
+			include: {
+				products: true,
+			},
+		});
+
+		return NextResponse.json({ status: 200, message: "OK", data, dataUMKM });
 	} catch (err) {
 		return NextResponse.json({ status: 500, message: err.message });
 	}

@@ -7,6 +7,7 @@ export function getUsers() {
 	const { data, isLoading, error } = useSWR("/api/users/get-users", fetcher);
 	return {
 		users: data?.data || [],
+		usersEmail: data?.email || [],
 		usersLoading: isLoading,
 		usersError: error,
 	};
@@ -20,6 +21,7 @@ export function getUserDetail(userid) {
 
 	return {
 		userDetail: data?.data,
+		userUMKM: data?.dataUMKM,
 		getuserDetailLoading: isLoading,
 		error,
 	};
@@ -55,6 +57,17 @@ export function getBusinessByUser(userid) {
 	};
 }
 
+export function getProductByUmkmid(umkmid) {
+	const { data, isLoading, error } = useSWR(
+		"/api/products/get-product-by-umkmid?umkmid=" + umkmid,
+		fetcher
+	);
+
+	return {
+		productByUmkmid: data?.data,
+	};
+}
+
 export function getCategorys() {
 	const { data, isLoading, error } = useSWR(
 		"/api/categorys/get-categorys",
@@ -72,7 +85,7 @@ export function getEvents(userid) {
 	const { data, isLoading, error } = useSWR("/api/events/get-events", fetcher);
 
 	return {
-		events: data?.data,
+		events: data?.data || [],
 		getEventsLoading: isLoading,
 		errorEvents: error,
 	};

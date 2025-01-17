@@ -28,7 +28,6 @@ export default function DataLists({
 				<div className="text-xl font-bold">{tableName}</div>
 				<input
 					type="text"
-					className="ms-auto border rounded-lg p-2 w-[100px] sm:w-[300px] outline-0 focus:ring-2 focus:ring-indigo-200 ring-inset text-sm grow sm:grow-0"
 					placeholder="Cari Disini..."
 					value={filterText}
 					onChange={(e) => setFilterText(e.target.value)}

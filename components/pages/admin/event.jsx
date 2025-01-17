@@ -4,18 +4,31 @@ import Card from "@/components/ui/card";
 import { useEffect, useState } from "react";
 import { mutate } from "swr";
 import Modal from "@/components/ui/modal";
-import { getEvents } from "@/utils/custom-swr";
+import { getEvents, getUsers } from "@/utils/custom-swr";
 import { useSession } from "next-auth/react";
 import Scripts from "@/utils/scripts";
 import axios from "axios";
 import Image from "next/image";
+import { Resend } from "resend";
+
+const resend = new Resend("re_3d6RWrDY_JtNax7UvB2GoRDVukujJB78a");
 
 export default function Event() {
 	const { data: session } = useSession();
+	const { usersEmail } = getUsers();
 	const { events } = getEvents();
 	const { toastAlert } = Scripts();
 	const [modal, setModal] = useState(false);
 	const [selectedData, setSelectedData] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
+
+	console.log(usersEmail);
+
+	const formattedDate =
+		events?.map((item) => ({
+			...item,
+			date: new Date(item.event_date).toDateString(),
+		})) || [];
 
 	const [eventid, setEventid] = useState("");
 	const [userid] = useState(session?.user?.userid);
@@ -43,19 +56,27 @@ export default function Event() {
 		formData.append("event_foto", event_foto);
 		formData.append("event_date", event_date);
 		formData.append("event_desc", event_desc);
+		formData.append(
+			"emailrecipients",
+			usersEmail?.map((item) => item.email).join(", ")
+		);
 
+		setIsLoading(true);
 		if (event_name === "" || event_desc === "") {
 			toastAlert("warning", "Form Error!", "Form masih ada yang kosong!", 3000);
+			setIsLoading(false);
 		} else if (!event_foto) {
 			toastAlert("warning", "File Error!", "Harap masukkan foto cover!", 3000);
+			setIsLoading(false);
 		} else {
-			await axios.put("/api/events/store-event", formData).then((res) => {
+			await axios.put("/api/events/store-event", formData).then(async (res) => {
 				if (res.data.status === 200) {
 					toastAlert("success", "Success Submitted!", res.data.message, 3000);
 				} else {
 					toastAlert("error", "Error Submitted!", res.data.message, 3000);
 				}
 				mutate("/api/events/get-events");
+				setIsLoading(false);
 			});
 		}
 	};
@@ -93,7 +114,7 @@ export default function Event() {
 		<div className="flex flex-col-reverse md:flex-row gap-3">
 			<Card className="basis-1/2 w-[800px] self-start">
 				<DataLists
-					data={events}
+					data={formattedDate}
 					subHeaderMemo={true}
 					tableName="Manajemen Event"
 					tableOptions={{
@@ -104,7 +125,7 @@ export default function Event() {
 					filterFields={["event_name"]}
 					columns={[
 						{ field: "event_name", header: "Nama Event" },
-						{ field: "event_date", header: "Tanggal" },
+						{ field: "date", header: "Tanggal" },
 						{
 							field: "actions",
 							header: "Aksi",
@@ -150,6 +171,9 @@ export default function Event() {
 											<pre>
 												Nama Event : {selectedData.event_name}
 												<br />
+												Waktu :{" "}
+												{new Date(selectedData.event_date).toDateString()}
+												<br />
 												<br />
 												Deskripsi :
 												<br />
@@ -171,7 +195,6 @@ export default function Event() {
 						<label className="mt-3">Masukkan Nama Event : </label>
 						<input
 							type="text"
-							className="bg-slate-200 focus:bg-white p-3 text-sm border outline-0 focus:ring-2 focus:ring-blue-300 focus:ring-inset rounded-lg duration-500 ease-in-out"
 							placeholder="Nama Event"
 							value={event_name}
 							onChange={(e) => setEventName(e.target.value)}
@@ -179,18 +202,12 @@ export default function Event() {
 					</div>
 					<div className="flex flex-col gap-2">
 						<label className="mt-3">Masukkan Foto Cover : </label>
-						<input
-							type="file"
-							accept="image/*"
-							className="bg-slate-200 focus:bg-white p-3 text-sm border outline-0 focus:ring-2 focus:ring-blue-300 focus:ring-inset rounded-lg duration-500 ease-in-out"
-							onChange={handleFileChange}
-						/>
+						<input type="file" accept="image/*" onChange={handleFileChange} />
 					</div>
 					<div className="flex flex-col gap-2">
 						<label className="mt-3">Masukkan Tanggal Pelaksanaan : </label>
 						<input
 							type="date"
-							className="bg-slate-200 focus:bg-white p-3 text-sm border outline-0 focus:ring-2 focus:ring-blue-300 focus:ring-inset rounded-lg duration-500 ease-in-out"
 							value={event_date}
 							onChange={(e) => setEventDate(e.target.value)}
 						/>
@@ -199,7 +216,6 @@ export default function Event() {
 						<label className="mt-3">Masukkan Deskripsi Kegiatan : </label>
 						<textarea
 							rows={7}
-							className="bg-slate-200 focus:bg-white p-3 text-sm border outline-0 focus:ring-2 focus:ring-blue-300 focus:ring-inset rounded-lg duration-500 ease-in-out"
 							placeholder="Masukkan Deskripsi Kegiatan Disini..."
 							value={event_desc}
 							onChange={(e) => setEventDesc(e.target.value)}
@@ -207,9 +223,14 @@ export default function Event() {
 					</div>
 					<button
 						type="submit"
-						className="bg-blue-500 p-2 rounded-lg text-white hover:bg-blue-400"
+						className={
+							isLoading
+								? "disabled:opacity-75 p-3 bg-blue-400 text-white"
+								: "p-3 bg-blue-500 hover:bg-blue-400 text-white"
+						}
+						disabled={isLoading}
 					>
-						Simpan
+						{isLoading ? "Loading..." : "Simpan"}
 					</button>
 				</form>
 			</Card>

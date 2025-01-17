@@ -7,8 +7,14 @@ export async function GET() {
 				NOT: { role: "ADMIN" },
 			},
 		});
+		const email = await prisma.users.findMany({
+			where: { role: { contains: "BUSSINES_OWNER" } },
+			select: {
+				email: true,
+			},
+		});
 
-		return NextResponse.json({ status: 200, message: "OK", data });
+		return NextResponse.json({ status: 200, message: "OK", data, email });
 	} catch (err) {
 		return NextResponse.json({ status: 500, message: err.message });
 	}

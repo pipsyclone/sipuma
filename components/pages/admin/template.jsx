@@ -5,13 +5,17 @@ import UserImage from "@/assets/user.png";
 import Logo from "@/assets/logo.png";
 import { useSession } from "next-auth/react";
 import Loading from "@/components/ui/loading";
+import { useTheme } from "@/context/ThemeProvider";
+import { getUserDetail } from "@/utils/custom-swr";
 
 export default function Dashboard(props) {
 	const { data: session } = useSession();
+	const { theme, toggleTheme } = useTheme();
 	const [sidebar, setSidebar] = useState(false);
+	const { userUMKM } = getUserDetail(session?.user?.userid);
 
 	return (
-		<div className="bg-slate-100 relative w-full h-screen flex">
+		<div className="bg-slate-100 dark:bg-zinc-900 relative w-full h-screen flex duration-500 ease-in-out">
 			<div
 				className={
 					sidebar
@@ -22,8 +26,8 @@ export default function Dashboard(props) {
 			<div
 				className={
 					sidebar
-						? "ms-0 sm:ms-[-300px] fixed bg-zinc-900 w-[300px] h-screen duration-500 ease-in-out z-20 p-3"
-						: "ms-[-300px] sm:ms-0 fixed bg-zinc-900 w-[300px] h-screen duration-500 ease-in-out z-20 p-3"
+						? "ms-0 sm:ms-[-300px] fixed bg-zinc-950 w-[300px] h-screen duration-500 ease-in-out z-20 p-3"
+						: "ms-[-300px] sm:ms-0 fixed bg-zinc-950 w-[300px] h-screen duration-500 ease-in-out z-20 p-3"
 				}
 			>
 				<div className="relative flex gap-3 mb-3">
@@ -108,6 +112,15 @@ export default function Dashboard(props) {
 								</div>
 								Pengajuan Usaha
 							</a>
+							<a
+								href={"/dashboard/bussines-product/" + userUMKM?.umkmid}
+								className="flex text-white border-0  hover:bg-zinc-300 hover:text-zinc-900 rounded-lg p-2 duration-500 ease-in-out"
+							>
+								<div className="w-12 text-center">
+									<i className="fa-solid fa-store"></i>
+								</div>
+								Produk UMKM
+							</a>
 						</>
 					)}
 				</div>
@@ -119,7 +132,7 @@ export default function Dashboard(props) {
 						: "flex flex-col w-screen h-screen ms-0 sm:ms-[300px] duration-500 ease-in-out"
 				}
 			>
-				<nav className="bg-white text-zinc-500 p-3 ps-5 pe-5 flex justify-between items-center">
+				<nav className="bg-white dark:bg-zinc-950 text-zinc-500 dark:text-white p-3 ps-5 pe-5 flex justify-between items-center duration-500 ease-in-out">
 					<button
 						type="button"
 						className="text-2xl"
@@ -133,25 +146,12 @@ export default function Dashboard(props) {
 					</button>
 
 					<div className="flex gap-8 items-center">
-						{/* <div className="relative inline-block text-left">
-							<button type="button" onClick={() => setNotif(!notif)}>
-								<span className="absolute ms-2 flex h-3 w-3">
-									<span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-									<span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
-								</span>
-								<i className="fa-solid fa-bell"></i>
-							</button>
-
-							<div
-								className={
-									notif
-										? "absolute right-0 sm:mx-auto z-10 mt-3 w-56 origin-top-right bg-white rounded-lg p-3 text-slate-500"
-										: "hidden"
-								}
-							>
-								Hello World
-							</div>
-						</div> */}
+						<button
+							onClick={toggleTheme}
+							className="p-2 bg-gray-300 dark:bg-gray-700 rounded"
+						>
+							{theme === "light" ? "🌙 Dark Mode" : "☀️ Light Mode"}
+						</button>
 
 						<a
 							href="/dashboard/settings"
@@ -170,7 +170,7 @@ export default function Dashboard(props) {
 				</nav>
 
 				<div className="p-5">{props.content}</div>
-				<div className="bg-zinc-900 text-slate-400 italic text-sm mt-auto p-5 w-full">
+				<div className="bg-zinc-950 text-slate-400 italic text-sm mt-auto p-5 w-full">
 					SIPUMA
 				</div>
 			</div>

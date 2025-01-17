@@ -1,15 +1,19 @@
 1. Install NodeJS
-2. Buka cmd tulis perintah "node --v", kalo muncul versinya berarti berhasil
+2. Buka cmd tulis perintah "node -v", kalo muncul versinya berarti berhasil
 3. Extract here sipuma
 4. Nyalain MySQL XAMPP
-5. Buka vscode, open folder ke sipuma
-6. Buka terminal
-7. Tulis perintah :
+5. Buat database dengan nama "sipuma"
+6. Buka vscode, open folder ke sipuma
+7. Buka terminal
+8. Tulis perintah :
 	> npm i --legacy-peer-deps
 	> npx prisma generate
 	> npx prisma db push
 	> npx prisma db seed
 	> npm run dev
-8. done, login pake username: admin, password : admin123, buat masuk sebagai admin
+9. done, login pake :
+	> username: admin, password : admin123, buat masuk sebagai admin
+	> username: user1, password : user123, buat masuk sebagai pengguna test 1
+	> username: user2, password : user123, buat masuk sebagai pengguna test 2
 
 NOTE : Kalo ada revisi lagi bilang

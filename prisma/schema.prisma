@@ -20,7 +20,7 @@ model Users {
   nophone  String @unique
   password String
   name     String
-  role     String @default("BUSINESS_OWNER")
+  role     String @default("BUSSINES_OWNER")
 
   UMKM      UMKM[]
   Categorys Categorys[]
@@ -30,21 +30,33 @@ model Users {
 }
 
 model UMKM {
-  umkmid           String   @id @default(cuid())
-  userid           String   @unique
-  categoryid       String
-  owner_name       String
-  bussines_name    String
-  bussines_foto    String   @db.Text
-  bussines_desc    String   @db.Text
-  bussines_address String   @db.Text
-  bussines_status  String   @default("WAIT_VERIFIED")
-  createdAt        DateTime @default(now())
+  umkmid              String   @id @default(cuid())
+  userid              String   @unique
+  categoryid          String
+  owner_name          String
+  bussines_name       String
+  bussines_foto       String   @db.Text
+  bussines_proof      String   @default("tidak") @db.Text
+  bussines_proof_foto String   @default("-") @db.Text
+  bussines_desc       String   @db.Text
+  bussines_address    String   @db.Text
+  bussines_status     String   @default("WAIT_VERIFIED")
+  createdAt           DateTime @default(now())
 
-  user     Users     @relation(fields: [userid], references: [userid], onDelete: Cascade)
-  category Categorys @relation(fields: [categoryid], references: [categoryid])
+  user     Users      @relation(fields: [userid], references: [userid], onDelete: Cascade)
+  category Categorys  @relation(fields: [categoryid], references: [categoryid])
+  products Products[]
 
   @@map("umkm")
+}
+
+model Products {
+  productid    String @id @default(cuid())
+  umkmid       String
+  productname  String
+  productimage String @db.Text
+
+  umkm UMKM @relation(fields: [umkmid], references: [umkmid], onDelete: Cascade)
 }
 
 model Categorys {

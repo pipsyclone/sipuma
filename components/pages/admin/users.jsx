@@ -2,23 +2,27 @@
 import Card from "@/components/ui/card";
 import DataLists from "@/components/ui/datatable";
 import { getUsers } from "@/utils/custom-swr";
+import Scripts from "@/utils/scripts";
 import axios from "axios";
+import { mutate } from "swr";
 
 export default function Users() {
 	const { users } = getUsers();
-	console.log(users);
+	const { toastAlert } = Scripts();
+
 	const handleDelete = async (userid) => {
 		await axios
 			.delete("/api/users/delete-user?userid=" + userid)
 			.then((res) => {
 				if (res.data.status === 200) {
 					toastAlert(
-						"warning",
-						"Kata Sandi Gagal!",
-						"Form tidak boleh kosong!",
+						"success",
+						"Berhasil hapus!",
+						"Penghapus data pengguna berhasil!",
 						3000
 					);
 				}
+				mutate("/api/users/get-users");
 			});
 	};
 	return (

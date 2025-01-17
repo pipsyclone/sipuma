@@ -166,7 +166,7 @@ export default function BussinesSubmission() {
 									businessByUser?.bussines_status === "VERIFIED" ? true : false
 								}
 							/>
-							<Image src={`/foto-umkm/${businessByUser?.bussines_foto}`} alt={'image'} width={300} height={150} className={businessByUser?.bussines_foto !== "-" ? "" : "hidden"} />
+							<Image src={`/foto-umkm/${businessByUser?.bussines_foto}`} alt={'image'} width={300} height={150} className={businessByUser?.bussines_foto === undefined ? "hidden" : ""} />
 						</div>
 						<div className="flex flex-col gap-2 basis-1/2">
 							<label className="text-sm">Pilih Kategori Usaha : </label>
